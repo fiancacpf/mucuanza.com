@@ -1,0 +1,47 @@
+<Files "sitemap.xml">
+    Header set Content-Type "application/xml"
+</Files>
+
+<Files ~ "^.*\.([Hh][Tt][Aa])">
+    order allow,deny
+    deny from all
+    satisfy all
+</Files>
+
+<FilesMatch ".(htm|php|css|js|php)$">
+    AddDefaultCharset UTF-8
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    Options -Indexes
+
+    php_value date.timezone Africa/Sao_Tome
+
+    RewriteEngine On
+
+    # HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Rotas específicas
+    RewriteRule ^candidatura/?$ candidatura.php [L]
+    RewriteRule ^conselho-de-gerencia/?$ conselho-de-gerencia.php [L]
+    RewriteRule ^contactos/?$ contactos.php [L]
+    RewriteRule ^logistica/?$ logistica.php [L]
+    RewriteRule ^meio-ambiente/?$ meio-ambiente.php [L]
+    RewriteRule ^mineracao/?$ mineracao.php [L]
+    RewriteRule ^nosso-produto/?$ nosso-produto.php [L]
+    RewriteRule ^noticias/?$ noticias.php [L]
+    RewriteRule ^processamento/?$ processamento.php [L]
+    RewriteRule ^saude-e-seguranca/?$ saude-e-seguranca.php [L]
+    RewriteRule ^sobre-nos/?$ sobre-nos.php [L]
+
+    # Não reescrever arquivos ou diretórios que realmente existem
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Fallback: somente URLs que não existem
+    RewriteRule ^(.+)$ single-page.php [L,QSA]
+
+</IfModule>
